@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lista de Tarefas</title>
+  <style>
+    /* Fundo com imagem de neve */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 10px;
+      background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      text-shadow: 0 0 5px black;
+    }
+
+    h1, h2, label {
+      /* sombra para melhor leitura */
+      text-shadow: 0 0 6px black;
+    }
+
+    .tarefa {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .concluida {
+      text-decoration: line-through;
+      color: #ddd;
+    }
+    button {
+      margin-left: 8px;
+      background-color: rgba(255,255,255,0.2);
+      border: 1px solid white;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: rgba(255,255,255,0.4);
+    }
+    select, input[type="text"] {
+      padding: 5px;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid white;
+      background-color: rgba(255,255,255,0.2);
+      color: white;
+      text-shadow: none;
+    }
+    select option {
+      color: black;
+      text-shadow: none;
+    }
+    label {
+      margin-right: 10px;
+    }
+
+    /* Botão Adicionar tarefa azul */
+    #btnAdicionar {
+      background-color: #007BFF; /* azul */
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-left: 0; /* remover margin-left para ficar alinhado */
+    }
+    #btnAdicionar:hover {
+      background-color: #0056b3; /* azul mais escuro */
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lista de Tarefas</h1>
+
+  <div>
+    <label for="desc">Descrição:</label>
+    <input type="text" id="desc" placeholder="Digite a tarefa" />
+  </div>
+  <div style="margin-top:8px;">
+    <label for="prioridade">Prioridade:</label>
+    <select id="prioridade">
+      <option value="baixa">Baixa</option>
+      <option value="media" selected>Média</option>
+      <option value="alta">Alta</option>
+    </select>
+  </div>
+  <div style="margin-top:10px;">
+    <button id="btnAdicionar">Adicionar tarefa</button>
+  </div>
+
+  <h2 style="margin-top:30px;">Tarefas</h2>
+  <div id="listaTarefas">
+    <!-- Lista aparecerá aqui -->
+  </div>
+
+  <script>
+    const tarefas = [];
+
+    const descInput = document.getElementById('desc');
+    const prioridadeSelect = document.getElementById('prioridade');
+    const btnAdicionar = document.getElementById('btnAdicionar');
+    const listaTarefasDiv = document.getElementById('listaTarefas');
+
+    function renderizarTarefas() {
+      listaTarefasDiv.innerHTML = '';
+      if (tarefas.length === 0) {
+        listaTarefasDiv.textContent = 'Nenhuma tarefa cadastrada.';
+        return;
+      }
+
+      tarefas.forEach((tarefa, i) => {
+        const div = document.createElement('div');
+        div.className = 'tarefa';
+
+        const texto = document.createElement('span');
+        texto.textContent = `${i + 1}. ${tarefa.descricao} (${tarefa.prioridade})`;
+        if (tarefa.concluida) texto.classList.add('concluida');
+
+        div.appendChild(texto);
+
+        // Botão concluir / desfazer
+        const btnConcluir = document.createElement('button');
+        btnConcluir.textContent = tarefa.concluida ? 'Desmarcar' : 'Concluir';
+        btnConcluir.onclick = () => {
+          tarefa.concluida = !tarefa.concluida;
+          renderizarTarefas();
+        };
+        div.appendChild(btnConcluir);
+
+        // Botão remover
+        const btnRemover = document.createElement('button');
+        btnRemover.textContent = 'Remover';
+        btnRemover.onclick = () => {
+          tarefas.splice(i, 1);
+          renderizarTarefas();
+        };
+        div.appendChild(btnRemover);
+
+        listaTarefasDiv.appendChild(div);
+      });
+    }
+
+    btnAdicionar.onclick = () => {
+      const descricao = descInput.value.trim();
+      const prioridade = prioridadeSelect.value;
+
+      if (!descricao) {
+        alert('Por favor, digite a descrição da tarefa.');
+        return;
+      }
+
+      tarefas.push({ descricao, prioridade, concluida: false });
+      descInput.value = '';
+      prioridadeSelect.value = 'media';
+      renderizarTarefas();
+    };
+
+    renderizarTarefas();
+  </script>
+
+</body>
+</html>
