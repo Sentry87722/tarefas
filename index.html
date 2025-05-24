@@ -5,7 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lista de Tarefas</title>
   <style>
-    /* ... seu CSS permanece igual ... */
+    /* Fundo com imagem de neve */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 10px;
+      background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      text-shadow: 0 0 5px black;
+    }
+
+    h1, h2, label {
+      /* sombra para melhor leitura */
+      text-shadow: 0 0 6px black;
+    }
+
+    .tarefa {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .concluida {
+      text-decoration: line-through;
+      color: #ddd;
+    }
+    button {
+      margin-left: 8px;
+      background-color: rgba(255,255,255,0.2);
+      border: 1px solid white;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: rgba(255,255,255,0.4);
+    }
+    select, input[type="text"] {
+      padding: 5px;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid white;
+      background-color: rgba(255,255,255,0.2);
+      color: white;
+      text-shadow: none;
+    }
+    select option {
+      color: black;
+      text-shadow: none;
+    }
+    label {
+      margin-right: 10px;
+    }
+
+    /* Botão Adicionar tarefa azul */
+    #btnAdicionar {
+      background-color: #007BFF; /* azul */
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-left: 0; /* remover margin-left para ficar alinhado */
+    }
+    #btnAdicionar:hover {
+      background-color: #0056b3; /* azul mais escuro */
+    }
   </style>
 </head>
 <body>
@@ -34,7 +107,7 @@
   </div>
 
   <script>
-    // 1. Lê as tarefas do localStorage ou começa com array vazio
+    // Ler as tarefas do localStorage ao iniciar
     const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
 
     const descInput = document.getElementById('desc');
@@ -68,7 +141,7 @@
         btnConcluir.textContent = tarefa.concluida ? 'Desmarcar' : 'Concluir';
         btnConcluir.onclick = () => {
           tarefa.concluida = !tarefa.concluida;
-          salvarTarefas();   // Salva após alteração
+          salvarTarefas(); // salvar após alteração
           renderizarTarefas();
         };
         div.appendChild(btnConcluir);
@@ -78,7 +151,7 @@
         btnRemover.textContent = 'Remover';
         btnRemover.onclick = () => {
           tarefas.splice(i, 1);
-          salvarTarefas();   // Salva após alteração
+          salvarTarefas(); // salvar após alteração
           renderizarTarefas();
         };
         div.appendChild(btnRemover);
@@ -97,7 +170,7 @@
       }
 
       tarefas.push({ descricao, prioridade, concluida: false });
-      salvarTarefas();   // Salva após alteração
+      salvarTarefas(); // salvar após alteração
       descInput.value = '';
       prioridadeSelect.value = 'media';
       renderizarTarefas();
